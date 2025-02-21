@@ -5,6 +5,9 @@
 package tcpcomunication;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 /*
@@ -23,15 +26,23 @@ public class MainServer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Server s = new Server(1906);
+        Server s = new Server(2006);
+        int num = 0;
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Inserisci il numero di client con la quale si vuole realizzare una comunicazione TCP");
-        int numClient = scanner.nextInt();
-        scanner.close();
-        for(int i=0; i<numClient; i++){
+        System.out.print("Inserisci il numero di client con la quale si vuole realizzare una comunicazione TCP: ");
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            num = Integer.parseInt(br.readLine());
+            System.out.println("Numero inserito con successo");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        for(int i=0; i<num; i++){
         s.attendi();
-        //s.leggi();
-        //s.scrivi();
+        s.leggi();
+        s.scrivi();
         s.chiudi();
     }
         s.termina();

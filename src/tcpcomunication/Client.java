@@ -1,14 +1,9 @@
 package tcpcomunication;
 
-import java.net.ConnectException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -19,63 +14,68 @@ import java.util.logging.Logger;
  *
  * @author mencu
  */
-public class Client {
+public class  Client {
+
     String nome;
     String colore;
     Socket socket;
-    
-    public Client(String nome, String colore){
-        this.nome=nome;
-        this.colore=colore;
+
+    public Client(String nome){
+        this.nome = nome;
+        this.colore = colore;
+
     }
-    
-    public void connetti(String nomeServer, int porta){
+
+    public void connetti(String S, int portaServer){
         try {
-            socket = new Socket(nomeServer, porta);
-            System.out.println("1) CONNESSIONE AVVENUTA CON IL SERVER");
-        } catch(ConnectException ex){
-            System.out.println("errore connessione Server");
-        } catch(UnknownHostException ex){
-            System.out.println("errore risoluzione del nome");
-        }catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("ERRORE NELLA CONNESSIONE");
-        }
-        }
-    
-     public void leggi() {
-       InputStream i;
-        try {
-            i = socket.getInputStream();
-            i.read();
-        } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-     
-      public void scrivi() {
-         try {
-             OutputStream o = socket.getOutputStream();
-             o.write(1);
-             o.flush();
+            socket = new Socket(S, portaServer);
+            System.out.println("Connessione al server avvenuta");
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Errore: Connessione con server non avvenuta");
+        }
+
+    }
+    public void leggi() {
+        InputStream i;
+        BufferedReader br;
+        String messaggio;
+
+        try {
+            i=socket.getInputStream();
+            br=new BufferedReader(new InputStreamReader(i));
+            messaggio=br.readLine();
+            System.out.println("Ricevuto il messaggio: " + messaggio);
+        } catch(IOException ex){
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Errore: Messaggio non ricevuto");
         }
     }
-    
-    public void chiudi(){
-        if(socket!=null){
-            try{
+
+    public void scrivi() {
+        OutputStream os;
+        BufferedWriter bw;
+        String mess="Client attivo";
+        try{
+            os=socket.getOutputStream();
+            bw=new BufferedWriter(new OutputStreamWriter(os));
+            bw.write(mess);
+            bw.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void chiudi() {
+        if (socket!=null) {
+            try {
                 socket.close();
-                System.out.println("4) CHIUSURA DELLA CONNESSIONE CON IL SERVER");
+                System.out.println("\n Chiusura socket avvenuta");
+            } catch (IOException e) {
+                System.err.println("Errore nella chiusura con il client");
             }
-            catch(ConnectException ex){
-            System.err.println("ERRORE: SERVER NON CONNESSO");
-            }
-            catch(IOException ex){
-             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        } else {
+            System.out.println("Il Socket non è stato istanziato");
         }
     }
-    
 }

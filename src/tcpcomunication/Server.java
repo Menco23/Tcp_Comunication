@@ -4,9 +4,7 @@
  */
 package tcpcomunication;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -68,10 +66,13 @@ public class Server {
         
         public void scrivi(){
             OutputStream o;
+            BufferedWriter bw;
+            String mess = "Server Attivo";
         try {
              o = clientSocket.getOutputStream();
-             o.write(1);
-             o.flush();
+             bw = new BufferedWriter(new OutputStreamWriter(o));
+             bw.write(mess + "\n");
+             bw.flush();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
