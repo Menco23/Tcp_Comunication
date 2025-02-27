@@ -25,31 +25,33 @@ public class Server {
     ServerSocket serverSocket;
     Socket clientSocket;
     int porta;
+    public static final String VERDE = "\u001B[38;2;0;255;204m";
+    public static final String RESET = "\u001B[0m";
     
     public Server(int porta){
         this.porta=porta;
         try{
             serverSocket = new ServerSocket(porta);
-            System.out.println("1) SERVER IN ASCOLTO");
+            System.out.println(VERDE + " Server in Ascolto" + RESET);
         }
         catch(BindException ex) {
-            System.out.println("porta occupata");
+            System.out.println(VERDE + "\n porta occupata" + RESET);
         } catch(IllegalArgumentException ex) {
-             System.out.println("numero di porta non valido");
+             System.out.println(VERDE + "\n numero di porta non valido" + RESET);
         }
         catch(IOException ex){
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("ERRORE DEL SERVER NELLA FASE DI BINDING");
+            System.err.println(VERDE + "\n Errore nella fase di binding" + RESET);
         }
     }
     
         public Socket attendi(){
         try {
             clientSocket = serverSocket.accept();
-            System.out.println("2) CONNESSIONE CON IL CLIENT AVVENUTA E DATA SOCKET CREATO");
+            System.out.println(VERDE + "\n Connessione avvenuta con il client e data socket creato" + RESET);
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("PROBLEMI DI CONNESSIONE CON IL CLIENT");
+            System.err.println(VERDE + "\n Poblemi di connessione con il client" + RESET);
         }
         return clientSocket;
         }
@@ -82,7 +84,7 @@ public class Server {
         if(clientSocket!=null){
             try{
                 clientSocket.close();
-                System.out.println("5) CHIUSURA DELLA CONNESSIONE CON IL CLIENT");
+                System.out.println(VERDE + "\n Chiusura della connessione con il client" + RESET);
             }
             catch(IOException ex){
              Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,7 +95,7 @@ public class Server {
         public void termina(){
            try {
             serverSocket.close();
-            System.out.println("6) chiusura Server");
+            System.out.println(VERDE + "\n chiusura Server" + RESET);
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -17,22 +17,24 @@ import java.util.logging.Logger;
 public class  Client {
 
     String nome;
-    String colore;
     Socket socket;
+    public static final String BLUE = "\u001B[36m";
+    public static final String RESET = "\u001B[0m";
+
+
 
     public Client(String nome){
         this.nome = nome;
-        this.colore = colore;
 
     }
 
     public void connetti(String S, int portaServer){
         try {
             socket = new Socket(S, portaServer);
-            System.out.println("Connessione al server avvenuta");
+            System.out.println(BLUE + "Connessione al server avvenuta"+ RESET);
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("Errore: Connessione con server non avvenuta");
+            System.err.println(BLUE +"Errore: Connessione con server non avvenuta"+ RESET);
         }
 
     }
@@ -45,10 +47,10 @@ public class  Client {
             i=socket.getInputStream();
             br=new BufferedReader(new InputStreamReader(i));
             messaggio=br.readLine();
-            System.out.println("Ricevuto il messaggio: " + messaggio);
+            System.out.println(BLUE +"\n Ricevuto il messaggio: " + messaggio + RESET);
         } catch(IOException ex){
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("Errore: Messaggio non ricevuto");
+            System.err.println(BLUE +"\n Errore: Messaggio non ricevuto"+ RESET);
         }
     }
 
@@ -70,12 +72,12 @@ public class  Client {
         if (socket!=null) {
             try {
                 socket.close();
-                System.out.println("\n Chiusura socket avvenuta");
+                System.out.println(BLUE +"\n Chiusura socket avvenuta"+ RESET);
             } catch (IOException e) {
-                System.err.println("Errore nella chiusura con il client");
+                System.err.println(BLUE +"\n Errore nella chiusura con il client"+ RESET);
             }
         } else {
-            System.out.println("Il Socket non è stato istanziato");
+            System.out.println(BLUE +"\n Il Socket non è stato istanziato"+ RESET );
         }
     }
 }
